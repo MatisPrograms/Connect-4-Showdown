@@ -2,6 +2,7 @@ let turn = 0;
 const players = ["red", "yellow"];
 let lastPlayed = Math.random() < 0.5 ? players[0] : players[1];
 let board = newGame();
+let isFinished = false;
 
 function newGame() {
     return [['', '', '', '', '', ''],
@@ -69,8 +70,27 @@ function checkWinnerFromCell(board, row, col) {
     return winner;
 }
 
+function isColumnAvailable(number) {
+    return board[number][board[0].length - 1] === "";
+}
+
+function columnsAvailable() {
+    const columns = [];
+    for (let i = 0; i < board.length; i++) {
+        if (board[i][board[i].length - 1] === "") columns.push(i);
+    }
+    return columns;
+}
+
+function cellCoordinates(cell) {
+    return {
+        x: parseInt(cell.id[0]),
+        y: parseInt(cell.id[1])
+    }
+}
+
 function playCell(x, y, colour) {
-    board[x][y] = colour.charAt(0).toUpperCase();
+    board[x][y] = shortLabel(colour);
     document.getElementById(x + "" + y).classList.add(colour);
 
     const winner = checkWinnerFromCell(board, x, y)

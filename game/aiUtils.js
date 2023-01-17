@@ -1,64 +1,60 @@
-const maxDepth = 5; // you can change this value to set the number of turns to predict
-const aiPlayer = "red"; // you can change this value to set the AI player color
+let aiPlayer;
+let maxIterations = 1000;
 
 function evaluateBoard(board) {
-    let aiPlayerCount = 0;
-    let opponentCount = 0;
+    let aiPlayerThreats = 0;
+    let opponentThreats = 0;
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
             if (board[i][j] === aiPlayer) {
-                aiPlayerCount++;
+                aiPlayerThreats += checkThreats(board, i, j, aiPlayer);
             } else if (board[i][j] !== "") {
-                opponentCount++;
+                opponentThreats += checkThreats(board, i, j, board[i][j]);
             }
         }
     }
-    return aiPlayerCount - opponentCount;
+    console.log(aiPlayerThreats - opponentThreats);
+    return aiPlayerThreats - opponentThreats;
 }
 
-function minmax(board, depth, player, alpha, beta) {
-    console.log("MinMax: " + board, depth, player, alpha, beta);
-    if (depth === 0 || depth === maxDepth || checkWinner(board) || checkDraw(board)) {
-        return evaluateBoard(board);
-    }
-    let bestScore;
-    let bestMove;
-    if (player === aiPlayer) {
-        bestScore = -Infinity;
+function neighbors(board) {
+    const columnsUsed = [];
+    for (let j = 0; j < board[0].length; j++) {
         for (let i = 0; i < board.length; i++) {
-            for (let j = 0; j < board[i].length; j++) {
-                if (board[i][j] === "") {
-                    let newBoard = JSON.parse(JSON.stringify(board));
-                    newBoard[i][j] = player;
-                    let score = minmax(newBoard, depth - 1, playerTurn(), alpha, beta);
-                    if (score > bestScore) {
-                        bestScore = score;
-                        bestMove = [i, j];
-                    }
-                    alpha = Math.max(alpha, score);
-                    if (beta <= alpha) {
-                        break;
-                    }
-                }
+            if (columnsUsed.length < board.length && !columnsUsed.map(e => e.x).includes(i) && board[i][j] === "") {
+                columnsUsed.push({x: i, y: j});
             }
         }
-    } else {
-        bestScore = Infinity;
-        for (let i = 0; i < board.length; i++) {
-            for (let j = 0; j < board[i].length; j++) {
-                if (board[i][j] === "") {
-                    let newBoard = JSON.parse(JSON.stringify(board));
-                    newBoard[i][j] = player;
-                    let score = minmax(newBoard, depth - 1, playerTurn(), alpha, beta);
-                    if (score < bestScore) {
-                        bestScore = score;
-                        bestMove = [i, j];
-                    }
-                    beta = Math.min(beta, score);
-                    if (beta <= alpha) {
-                        break;
-                    }
-                }
+    }
+    return columnsUsed;
+}
+
+function minimax(board, depth, player, alpha, beta) {
+    if (maxIterations-- < 0 || depth === 0 || checkWinner(board) || checkDraw(board)) return evaluateBoard(board);
+    const nextPlayer = player === players[0] ? players[1] : players[0];
+    player = shortLabel(player);
+    let bestMove;
+    let bestScore = player === aiPlayer ? -Infinity : Infinity;
+
+    for (const neighbor of neighbors(board)) {
+        let newBoard = JSON.parse(JSON.stringify(board));
+        newBoard[neighbor.x][neighbor.y] = player;
+
+        let score = minimax(newBoard, depth - 1, nextPlayer, alpha, beta);
+        if (player === aiPlayer ? (score > bestScore) : (score < bestScore)) {
+            bestScore = score;
+            bestMove = [neighbor.x, neighbor.y];
+        }
+
+        if (player === aiPlayer) {
+            alpha = Math.max(alpha, score);
+            if (beta <= alpha) {
+                break;
+            }
+        } else {
+            beta = Math.min(beta, score);
+            if (beta <= alpha) {
+                break;
             }
         }
     }
@@ -66,14 +62,18 @@ function minmax(board, depth, player, alpha, beta) {
 }
 
 function MinMaxAIMove(colour) {
-    const chosenColumn = minmax(Array.from(board), 0, colour, -Infinity, Infinity).move[0];
-    console.log("MinMax AI's move: Column " + chosenColumn);
+    aiPlayer = shortLabel(colour);
+    const nextMove = minimax(JSON.parse(JSON.stringify(board)), 20, colour, -Infinity, Infinity);
+    if (!isNaN(nextMove)) return RandomAIMove();
+    const chosenColumn = nextMove.move[0];
+    console.log("MinMax AI's move: Column", chosenColumn);
     return chosenColumn;
 }
 
 function RandomAIMove() {
-    const chosenColumn = Math.floor(Math.random() * board.length);
-    console.log("Random AI's move: Column " + chosenColumn);
+    const availableColumns = columnsAvailable();
+    const chosenColumn = availableColumns[Math.floor(Math.random() * availableColumns.length)];
+    console.log("Random AI's move: Column", chosenColumn);
     return chosenColumn;
 }
 
@@ -88,7 +88,6 @@ function AIMove(colour) {
             chosenColumn = RandomAIMove();
             break;
     }
-    console.log("Column Chosen:", chosenColumn, typeof chosenColumn);
     columnClicked(document.getElementsByClassName("column")[chosenColumn]);
     document.getElementById("ai-mode").toggleAttribute("playing");
 }

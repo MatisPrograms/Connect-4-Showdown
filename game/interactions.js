@@ -54,10 +54,15 @@ function togglePlayer() {
 }
 
 function playerTurn() {
-    return players[players.findIndex(p => p !== lastPlayed)];
+    return lastPlayed === players[0] ? players[1] : players[0];
+}
+
+function shortLabel(colour) {
+    return colour.charAt(0).toUpperCase();
 }
 
 function victory(cells) {
+    isFinished = true;
     disableColumnsClick();
     document.getElementById('player-info').innerText = 'Player ' + playerTurn() + ' wins!';
     document.getElementById('player-1').style.display = 'none';
@@ -69,17 +74,11 @@ function victory(cells) {
 }
 
 function draw() {
+    isFinished = true;
     disableColumnsClick();
     document.getElementById('player-info').innerText = "It's a Draw!";
     document.getElementById('player-1').style.display = 'none';
     document.getElementById('player-2').style.display = 'none';
-}
-
-function cellCoordinates(cell) {
-    return {
-        x: parseInt(cell.id[0]),
-        y: parseInt(cell.id[1])
-    }
 }
 
 function columnClicked(event) {
@@ -115,7 +114,7 @@ function columnClicked(event) {
     }
     togglePlayer();
 
-    if (mode === "AI" && !document.getElementById("ai-mode").hasAttribute("playing")) {
+    if (!isFinished && mode === "AI" && !document.getElementById("ai-mode").hasAttribute("playing")) {
         setTimeout(() => AIMove(playerTurn()), 500);
     }
 }
@@ -135,10 +134,4 @@ function resetTable() {
     document.getElementById('player-info').innerText = 'Player\'s Turn';
 
     enableColumnsClick();
-}
-
-function delay(milliseconds) {
-    return new Promise(resolve => {
-        setTimeout(resolve, milliseconds);
-    });
 }
