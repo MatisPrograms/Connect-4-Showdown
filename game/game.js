@@ -135,6 +135,8 @@ function checkWinBoard(board) {
     }
 }
 
+
+
 function boardToKey(board) {
     // Initialize an empty string to store the key
     let key = '';
@@ -332,6 +334,14 @@ function drawVictory(cells) {
     cells.forEach(cell => {
         cell.classList.add("green")
     });
+}
+function isDrawHuman() {
+    for (let i = 0; i < 7; i++) {
+        if(!document.getElementById(i+"5").classList.contains("red") && !document.getElementById(i+"5").classList.contains("yellow")){
+            return false
+        }
+    }
+    return true;
 }
 
 function checkWin(cell, colour) {
