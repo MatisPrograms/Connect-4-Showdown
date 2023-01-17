@@ -18,6 +18,10 @@ function isDraw(board) {
     }
     return true;
 }
+function getCoord(cases){
+    return cases.id[0]+":"+cases.id[1];
+
+}
 
 function checkWinBoard(board) {
     const cells = [];
