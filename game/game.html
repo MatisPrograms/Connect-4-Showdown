@@ -9,19 +9,16 @@
 
 <h1>Connect 4 Showdown</h1>
 
-<div class="toggle-container">
-    <label class="switch">
-        <input id="ai-toggle" onchange="showAIModes();" type="checkbox">
-        <span class="slider round"></span>
-    </label>
-    <div class="mode-select" id="ai-modes" style="display: none">
-        <label for="ai-mode">AI Mode</label>
-        <select id="ai-mode" style="text-align: center">
-            <option value="random">Random</option>
-            <option value="minmax">Minmax</option>
-        </select>
-    </div>
+<!--<div class="mode-select" id="ai-modes">-->
+<div class="mode-select" id="ai-modes" style="display: none">
+    <label for="ai-mode">AI Mode</label>
+    <select id="ai-mode" style="text-align: center">
+        <option value="random">Random</option>
+        <option value="minmax">Minmax</option>
+    </select>
 </div>
+
+<i class="fas fa-times" onclick="window.location.href='http://www.example.com/home'"></i>
 
 <div class="game-board">
     <table id="game-board" style="transform: rotate(90deg); margin-bottom: 10px; width: 80%">

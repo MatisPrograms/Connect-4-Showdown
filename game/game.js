@@ -1,11 +1,17 @@
-function showAIModes() {
-    const aiModes = document.getElementById('ai-modes');
-    const checkbox = document.getElementById('ai-toggle');
-    if (checkbox.checked) {
-        aiModes.style.display = 'block';
-    } else {
-        aiModes.style.display = 'none';
-    }
+const urlParams = new URLSearchParams(window.location.search);
+const mode = urlParams.get('mode');
+switch (mode) {
+    case '1v1':
+        break;
+    case 'AI':
+        window.onload = function () {
+            document.getElementById("ai-modes").style.display = "block";
+        };
+        break;
+    case 'Online':
+        break;
+    default:
+        window.location.href = '../homepage/home.html';
 }
 
 function isDraw(board) {
