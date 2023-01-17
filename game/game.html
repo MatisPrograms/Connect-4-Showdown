@@ -3,9 +3,10 @@
 <head>
     <title>Connect 4 Showdown</title>
     <link href="game.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="interactions.js" type="text/javascript"></script>
 </head>
 <body>
-<script src="game.js" type="text/javascript"></script>
 
 <h1>Connect 4 Showdown</h1>
 
@@ -16,11 +17,13 @@
         <option value="random">Random</option>
         <option value="minmax">Minmax</option>
     </select>
+    <script type="text/javascript" src="aiUtils.js"></script>
 </div>
 
-<i class="fas fa-times" onclick="window.location.href='http://www.example.com/home'"></i>
+<i class="fas fa-times" onclick="home()"></i>
 
 <div class="game-board">
+    <script src="game.js" type="text/javascript"></script>
     <table id="game-board" style="transform: rotate(90deg); margin-bottom: 10px; width: 80%">
         <tr class="column">
             <td class="cell" id="65"></td>
@@ -79,17 +82,20 @@
             <td class="cell" id="00"></td>
         </tr>
         <script>
-            enableColumnClicked();
+            enableColumnsClick();
         </script>
     </table>
 
-    <button id="reset-button" onclick="restTable()">
+    <button id="reset-button" onclick="resetTable()">
         Reset Game
     </button>
 </div>
 <div class="turn-container" id="turn-container">
     <h2 id="player-info">Player's Turn</h2>
     <div class="player red" id="player-1"></div>
-    <div class="player yellow" id="player-2" style="display: none"></div>
+    <div class="player yellow" id="player-2"></div>
+    <script>
+        togglePlayer();
+    </script>
 </div>
 </body>
