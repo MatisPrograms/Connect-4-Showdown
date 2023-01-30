@@ -1,7 +1,7 @@
 function updateTurn() {
     const style = document.createElement('style');
     style.innerHTML = `
-  #game-board tr:hover :not(td:not(.coin1):not(.coin2) ~ td):not(.coin1):not(.coin2) {
+  #game-board tr:not(.animating):hover :not(td:not(.coin1):not(.coin2) ~ td):not(.coin1):not(.coin2) {
     background-color: ` + (isFinished ? 'transparent' : playerTurn() === '1' ? '#e46874' : '#46bb9c') + `;
 }
   `;
@@ -11,8 +11,28 @@ function updateTurn() {
     document.getElementById('player-turn').classList.remove('coin' + lastPlayed);
 }
 
+function disableHighLight() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+  #game-board tr:hover :not(td:not(.coin1):not(.coin2) ~ td):not(.coin1):not(.coin2) {
+    animation-delay: 250ms;
+    background-color: transparent;
+}
+  `;
+    document.head.appendChild(style);
+}
+
 function enableColumnClick(column) {
     column.addEventListener("click", columnClicked);
+    for (let cell of column.children) {
+        cell.addEventListener("animationstart", function (event) {
+            event.target.parentNode.classList.add("animating");
+            updateTurn();
+        });
+        cell.addEventListener("animationend", function (event) {
+            event.target.parentNode.classList.remove("animating");
+        });
+    }
 }
 
 function enableColumnsClick() {
@@ -74,6 +94,7 @@ function columnClicked(event) {
     togglePlayer();
 
     if (!isFinished && mode === "AI" && !document.getElementById("ai-mode").hasAttribute("playing")) {
+        disableHighLight();
         setTimeout(() => AIMove(playerTurn()), 500);
     }
 }

@@ -120,6 +120,11 @@ body {
     justify-content: center;
 }
 
+.bottom-grid label {
+    font-size: 1.5em;
+    margin: 0 10px;
+}
+
 #reset-game-button {
     margin-top: 20px;
     background-color: #28a745;
@@ -140,7 +145,7 @@ body {
 
 .turn-container {
     margin-left: 100px;
-    width: 200px;
+    width: fit-content;
     display: flex;
     align-items: center;
     background-color: #343541;
@@ -149,13 +154,7 @@ body {
     box-shadow: 0 5px 5px 0 #202123;
 }
 
-.turn-container h2 {
-    font-size: 1.5em;
-    text-align: center;
-}
-
 .coin-turn {
-    margin-left: 10px;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -163,17 +162,11 @@ body {
 
 .mode-select {
     margin-right: 100px;
-    width: 200px;
+    width: fit-content;
     display: flex;
     align-items: center;
     background-color: #343541;
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 5px 5px 0 #202123;
-}
-
-.mode-select label {
-    margin: 15px;
-    font-size: 1.5em;
-    text-align: center;
 }

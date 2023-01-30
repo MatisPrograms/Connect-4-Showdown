@@ -40,3 +40,16 @@
 .victory {
     background-color: white;
 }
+
+@keyframes size-change {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+.coin1.cell, .coin2.cell {
+    animation: size-change 0.5s ease-in-out;
+}
