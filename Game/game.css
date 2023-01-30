@@ -1,0 +1,42 @@
+.game-board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-board {
+    transform: rotate(-90deg);
+    background-color: #202123;
+    border-radius: 20px;
+    padding: 10px;
+    border-spacing: 1em;
+}
+
+#game-board tr {
+    cursor: pointer;
+    background-color: #444656;
+}
+
+#game-board tr:hover {
+    background-color: rgba(180, 180, 180, 0.1);
+}
+
+#game-board td {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.coin1 {
+    background-color: #e46874;
+}
+
+.coin2 {
+    background-color: #46bb9c;
+}
+
+.victory {
+    background-color: white;
+}

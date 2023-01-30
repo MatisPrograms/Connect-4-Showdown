@@ -1,5 +1,5 @@
 let turn = 0;
-const players = ["red", "yellow"];
+const players = ["1", "2"];
 let lastPlayed = Math.random() < 0.5 ? players[0] : players[1];
 let board = newGame();
 let isFinished = false;
@@ -90,8 +90,8 @@ function cellCoordinates(cell) {
 }
 
 function playCell(x, y, colour) {
-    board[x][y] = shortLabel(colour);
-    document.getElementById(x + "" + y).classList.add(colour);
+    board[x][y] = colour;
+    document.getElementById(x + "" + y).classList.add("coin" + colour);
 
     const winner = checkWinnerFromCell(board, x, y)
     if (winner.player !== "" && winner.cells.length > 0) victory(winner.cells)

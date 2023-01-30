@@ -2,20 +2,48 @@ let aiPlayer;
 let maxIterations = 1000;
 
 function evaluateBoard(board) {
-    let aiPlayerThreats = 0;
-    let opponentThreats = 0;
+    let score = 0;
+    let opponent = aiPlayer === "1" ? "2" : "1";
+
+    // Iterate through the board and count the number of consecutive
+    // pieces of the same color in a row, column, and diagonal
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
             if (board[i][j] === aiPlayer) {
-                aiPlayerThreats += checkThreats(board, i, j, aiPlayer);
-            } else if (board[i][j] !== "") {
-                opponentThreats += checkThreats(board, i, j, board[i][j]);
+                score += countThreats(board, i, j, aiPlayer);
+            } else if (board[i][j] === opponent) {
+                score -= countThreats(board, i, j, opponent);
             }
         }
     }
-    console.log(aiPlayerThreats - opponentThreats);
-    return aiPlayerThreats - opponentThreats;
+    return score;
 }
+
+function countThreats(board, x, y, player) {
+    let count = 0;
+    // Check horizontal threats
+    count += countConsecutive(board, x, y, 0, 1, player);
+    count += countConsecutive(board, x, y, 0, -1, player);
+    // Check vertical threats
+    count += countConsecutive(board, x, y, 1, 0, player);
+    // Check diagonal threats
+    count += countConsecutive(board, x, y, 1, 1, player);
+    count += countConsecutive(board, x, y, 1, -1, player);
+    return count;
+}
+
+function countConsecutive(board, x, y, dx, dy, player) {
+    let count = 0;
+    let i = x + dx;
+    let j = y + dy;
+    while (i >= 0 && i < board.length && j >= 0 && j < board[i].length && board[i][j] === player) {
+        count++;
+        i += dx;
+        j += dy;
+    }
+    return count;
+}
+
 
 function neighbors(board) {
     const columnsUsed = [];
@@ -32,7 +60,6 @@ function neighbors(board) {
 function minimax(board, depth, player, alpha, beta) {
     if (maxIterations-- < 0 || depth === 0 || checkWinner(board) || checkDraw(board)) return evaluateBoard(board);
     const nextPlayer = player === players[0] ? players[1] : players[0];
-    player = shortLabel(player);
     let bestMove;
     let bestScore = player === aiPlayer ? -Infinity : Infinity;
 
@@ -62,7 +89,7 @@ function minimax(board, depth, player, alpha, beta) {
 }
 
 function MinMaxAIMove(colour) {
-    aiPlayer = shortLabel(colour);
+    aiPlayer = colour;
     const nextMove = minimax(JSON.parse(JSON.stringify(board)), 20, colour, -Infinity, Infinity);
     if (!isNaN(nextMove)) return RandomAIMove();
     const chosenColumn = nextMove.move[0];
