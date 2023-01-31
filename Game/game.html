@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>Connect 4 Showdown</title>
 
+    <link href="https://lh3.googleusercontent.com/DH6h4FYtrXglcMzS8lOU80LBkXBME346Zu2izCwgp9l1Litp7p_lE9DSqTJ-EgEMknDr" rel="icon">
     <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
-    <link href="https://lh3.googleusercontent.com/DH6h4FYtrXglcMzS8lOU80LBkXBME346Zu2izCwgp9l1Litp7p_lE9DSqTJ-EgEMknDr"
-          rel="icon">
-    <link href="layout.css" rel="stylesheet">
     <link href="../assets/normal.css" rel="stylesheet">
+    <link href="layout.css" rel="stylesheet">
 
-    <script defer src="../SideMenus/animations.js"></script>
-    <script defer src="../navigation.js" type="text/javascript"></script>
+    <script src="../navigation.js" type="text/javascript"></script>
+    <script src="../SideMenus/Chat/chat.js"></script>
+    <script src="../SideMenus/Social/social.js"></script>
 </head>
 
 <body class="container">
@@ -21,116 +21,7 @@
     </button>
 </span>
 
-<aside class="sidebar" id="left-sidebar">
-    <link href="../SideMenus/Chat/chat.css" rel="stylesheet">
-    <div class="sidebar-header">Chat</div>
-    <div class="chat-container">
-        <div class="chat-messages">
-            <div class="chat-message message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/matis">
-                    Me
-                </div>
-                <div class="chat-message-text">
-                    Hello You!
-                </div>
-            </div>
-            <div class="chat-message other message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/is">
-                    You
-                </div>
-                <div class="chat-message-text">
-                    Hello Me!
-                </div>
-            </div>
-            <div class="chat-message message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/matis">
-                    Me
-                </div>
-                <div class="chat-message-text">
-                    How are you?
-                </div>
-            </div>
-            <div class="chat-message other message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/is">
-                    You
-                </div>
-                <div class="chat-message-text">
-                    I'm fine, thanks!
-                </div>
-            </div>
-            <div class="chat-message other message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/is">
-                    You
-                </div>
-                <div class="chat-message-text">
-                    And you?
-                </div>
-            </div>
-            <div class="chat-message message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/matis">
-                    Me
-                </div>
-                <div class="chat-message-text">
-                    I'm fine too, thanks!
-                </div>
-            </div>
-            <div class="chat-message message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/matis">
-                    Me
-                </div>
-                <div class="chat-message-text">
-                    Want to play a game of Connect 4?
-                </div>
-            </div>
-            <div class="chat-message other message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/is">
-                    You
-                </div>
-                <div class="chat-message-text">
-                    Sure!
-                </div>
-            </div>
-            <div class="chat-message message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/matis">
-                    Me
-                </div>
-                <div class="chat-message-text">
-                    I'll start!
-                </div>
-            </div>
-            <div class="chat-message other message-hidden">
-                <div class="chat-avatar">
-                    <img alt="Avatar" src="https://source.boringavatars.com/beam/50/is">
-                    You
-                </div>
-                <div class="chat-message-text">
-                    I'll go first!
-                </div>
-            </div>
-        </div>
-        <div class="chat-input-container">
-            <textarea class="chat-input" placeholder="Message" rows="1"></textarea>
-            <div class="chat-send-icon">
-                <i class="fas fa-paper-plane"></i>
-            </div>
-        </div>
-    </div>
-</aside>
-<span>
-    <button class="drawer-toggle-button" id="toggle-chat-menu">
-        <i class="fas fa-chevron-right"></i>
-    </button>
-</span>
-
+<app-chat></app-chat>
 
 <section class="game-board-container">
     <link href="game.css" rel="stylesheet">
@@ -218,17 +109,7 @@
     </script>
 </section>
 
-<aside class="sidebar" id="right-sidebar">
-    <div class="sidebar-header">Friends</div>
-    <ul class="friends-list">
-        <!-- Friend list items here -->
-    </ul>
-</aside>
-<span>
-    <button class="drawer-toggle-button" id="toggle-social-menu">
-        <i class="fas fa-chevron-left"></i>
-    </button>
-</span>
+<app-social></app-social>
 
 </body>
 </html>
