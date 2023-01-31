@@ -1,5 +1,5 @@
 .chat-container {
-    height: calc(100% - 70px);
+    height: calc(100% - 75px);
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -20,12 +20,13 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
-    font-size: 1.5em;
+    font-size: 1em;
     outline: none;
     resize: none;
     background-color: #404150;
     color: white;
     overflow-y: scroll;
+    overflow-x: hidden;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
@@ -51,6 +52,7 @@
 .chat-messages {
     flex: 1;
     overflow-y: scroll;
+    overflow-x: hidden;
     -ms-overflow-style: none;
     scrollbar-width: none;
     width: 100%;
@@ -78,6 +80,10 @@
 
 .chat-message.other:hover {
     background-color: rgba(34, 0, 255, 0.1);
+}
+
+.chat-message:first-child {
+    margin-top: 10px;
 }
 
 .chat-message:not(:last-child) {

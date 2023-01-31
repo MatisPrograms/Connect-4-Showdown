@@ -1,47 +1,97 @@
 let aiPlayer;
-let maxIterations = 1000;
+let aiOpponent;
 
 function evaluateBoard(board) {
-    let score = 0;
-    let opponent = aiPlayer === "1" ? "2" : "1";
+    let score = {aiPlayer: 0, aiOpponent: 0};
 
-    // Iterate through the board and count the number of consecutive
-    // pieces of the same color in a row, column, and diagonal
-    for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
-            if (board[i][j] === aiPlayer) {
-                score += countThreats(board, i, j, aiPlayer);
-            } else if (board[i][j] === opponent) {
-                score -= countThreats(board, i, j, opponent);
+    let streaks = {aiPlayer: [], aiOpponent: []};
+    for (let row = 0; row < board.length; row++) {
+        let verticalStreak = {aiPlayer: 0, aiOpponent: 0};
+        let maxVerticalStreak = {aiPlayer: 0, aiOpponent: 0};
+        for (let cell = 0; cell < board[0].length; cell++) {
+            if (board[row][cell] === aiPlayer) {
+                verticalStreak.aiPlayer++;
+                maxVerticalStreak.aiPlayer = Math.max(maxVerticalStreak.aiPlayer, verticalStreak.aiPlayer);
+                verticalStreak.aiOpponent = 0;
+                maxVerticalStreak.aiOpponent = 0;
+            }
+            if (board[row][cell] === aiOpponent) {
+                verticalStreak.aiOpponent++;
+                maxVerticalStreak.aiOpponent = Math.max(maxVerticalStreak.aiOpponent, verticalStreak.aiOpponent);
+                verticalStreak.aiPlayer = 0;
+                maxVerticalStreak.aiPlayer = 0;
             }
         }
+        if (board[row][board[0].length - 1] !== "") {
+            maxVerticalStreak.aiPlayer = 0;
+            maxVerticalStreak.aiOpponent = 0;
+        }
+        streaks.aiPlayer.push(maxVerticalStreak.aiPlayer);
+        streaks.aiOpponent.push(maxVerticalStreak.aiOpponent);
     }
+
+    for (let col = 0; col < board[0].length; col++) {
+
+        // Left to right
+        let horizontalStreakLeft = {aiPlayer: 0, aiOpponent: 0};
+        let maxHorizontalStreakLeft = {aiPlayer: 0, aiOpponent: 0};
+        for (let cell = 0; cell < board.length; cell++) {
+            if (board[cell][col] === aiPlayer) {
+                horizontalStreakLeft.aiPlayer++;
+                maxHorizontalStreakLeft.aiPlayer = Math.max(maxHorizontalStreakLeft.aiPlayer, horizontalStreakLeft.aiPlayer);
+                horizontalStreakLeft.aiOpponent = 0;
+                maxHorizontalStreakLeft.aiOpponent = 0;
+            }
+            if (board[cell][col] === aiOpponent) {
+                horizontalStreakLeft.aiOpponent++;
+                maxHorizontalStreakLeft.aiOpponent = Math.max(maxHorizontalStreakLeft.aiOpponent, horizontalStreakLeft.aiOpponent);
+                horizontalStreakLeft.aiPlayer = 0;
+                maxHorizontalStreakLeft.aiPlayer = 0;
+            }
+        }
+        if (board[board.length - 1][col] !== "") {
+            maxHorizontalStreakLeft.aiPlayer = 0;
+            maxHorizontalStreakLeft.aiOpponent = 0;
+        }
+
+        // Right to left
+        let horizontalStreakRight = {aiPlayer: 0, aiOpponent: 0};
+        let maxHorizontalStreakRight = {aiPlayer: 0, aiOpponent: 0};
+        for (let cell = board.length - 1; cell >= 0; cell--) {
+            if (board[cell][col] === aiPlayer) {
+                horizontalStreakRight.aiPlayer++;
+                maxHorizontalStreakRight.aiPlayer = Math.max(maxHorizontalStreakRight.aiPlayer, horizontalStreakRight.aiPlayer);
+                horizontalStreakRight.aiOpponent = 0;
+                maxHorizontalStreakRight.aiOpponent = 0;
+            }
+            if (board[cell][col] === aiOpponent) {
+                horizontalStreakRight.aiOpponent++;
+                maxHorizontalStreakRight.aiOpponent = Math.max(maxHorizontalStreakRight.aiOpponent, horizontalStreakRight.aiOpponent);
+                horizontalStreakRight.aiPlayer = 0;
+                maxHorizontalStreakRight.aiPlayer = 0;
+            }
+        }
+        if (board[0][col] !== "") {
+            maxHorizontalStreakRight.aiPlayer = 0;
+            maxHorizontalStreakRight.aiOpponent = 0;
+        }
+
+        streaks.aiPlayer.push(maxHorizontalStreakLeft.aiPlayer, maxHorizontalStreakRight.aiPlayer);
+        streaks.aiOpponent.push(maxHorizontalStreakLeft.aiOpponent, maxHorizontalStreakRight.aiOpponent);
+    }
+
+    score.aiPlayer = streaks.aiPlayer.map(s => evaluateStreak(s, aiPlayer)).reduce((a, b) => a + b, 0);
+    score.aiOpponent = streaks.aiOpponent.map(s => evaluateStreak(s, aiOpponent)).reduce((a, b) => a + b, 0);
+
+
+    // console.log(verticalScore);
+    // console.log(horizontalScore);
+    // console.log(score);
     return score;
 }
 
-function countThreats(board, x, y, player) {
-    let count = 0;
-    // Check horizontal threats
-    count += countConsecutive(board, x, y, 0, 1, player);
-    count += countConsecutive(board, x, y, 0, -1, player);
-    // Check vertical threats
-    count += countConsecutive(board, x, y, 1, 0, player);
-    // Check diagonal threats
-    count += countConsecutive(board, x, y, 1, 1, player);
-    count += countConsecutive(board, x, y, 1, -1, player);
-    return count;
-}
-
-function countConsecutive(board, x, y, dx, dy, player) {
-    let count = 0;
-    let i = x + dx;
-    let j = y + dy;
-    while (i >= 0 && i < board.length && j >= 0 && j < board[i].length && board[i][j] === player) {
-        count++;
-        i += dx;
-        j += dy;
-    }
-    return count;
+function evaluateStreak(streak, colour) {
+    return (colour === aiPlayer ? 1 : -1) * (streak >= 4 ? Infinity : streak === 3 ? 10000 : streak === 2 ? 100 : streak === 1 ? 1 : 0);
 }
 
 
@@ -58,16 +108,18 @@ function neighbors(board) {
 }
 
 function minimax(board, depth, player, alpha, beta) {
-    if (maxIterations-- < 0 || depth === 0 || checkWinner(board) || checkDraw(board)) return evaluateBoard(board);
-    const nextPlayer = player === players[0] ? players[1] : players[0];
+    if (depth === 0 || checkWinner(board) || checkDraw(board)) return player === aiPlayer ? evaluateBoard(board).aiPlayer : evaluateBoard(board).aiOpponent;
     let bestMove;
     let bestScore = player === aiPlayer ? -Infinity : Infinity;
+
+    console.log(`Evaluating depth: ${depth} for player: ${player}`);
 
     for (const neighbor of neighbors(board)) {
         let newBoard = JSON.parse(JSON.stringify(board));
         newBoard[neighbor.x][neighbor.y] = player;
 
-        let score = minimax(newBoard, depth - 1, nextPlayer, alpha, beta);
+        let score = minimax(newBoard, depth - 1, player === players[0] ? players[1] : players[0], alpha, beta);
+        if (isNaN(score)) score = score.score;
         if (player === aiPlayer ? (score > bestScore) : (score < bestScore)) {
             bestScore = score;
             bestMove = [neighbor.x, neighbor.y];
@@ -89,17 +141,28 @@ function minimax(board, depth, player, alpha, beta) {
 }
 
 function MinMaxAIMove(colour) {
+    console.log("MixMax AI's turn")
+    document.getElementById("loading-circle").classList.toggle('thinking');
+
     aiPlayer = colour;
-    const nextMove = minimax(JSON.parse(JSON.stringify(board)), 20, colour, -Infinity, Infinity);
-    if (!isNaN(nextMove)) return RandomAIMove();
-    const chosenColumn = nextMove.move[0];
-    console.log("MinMax AI's move: Column", chosenColumn);
-    return chosenColumn;
+    aiOpponent = colour === "1" ? "2" : "1";
+    const nextMove = minimax(JSON.parse(JSON.stringify(board)), 10, aiPlayer, -Infinity, Infinity);
+
+    document.getElementById("loading-circle").classList.toggle('thinking');
+    console.log("MinMax AI's move: Column", nextMove.move[0], nextMove);
+    return nextMove.move[0];
 }
 
 function RandomAIMove() {
+    console.log("Random AI's turn")
+    document.getElementById("loading-circle").classList.toggle('thinking');
+
     const availableColumns = columnsAvailable();
     const chosenColumn = availableColumns[Math.floor(Math.random() * availableColumns.length)];
+    // Wait 0.5 seconds
+
+
+    document.getElementById("loading-circle").classList.toggle('thinking');
     console.log("Random AI's move: Column", chosenColumn);
     return chosenColumn;
 }

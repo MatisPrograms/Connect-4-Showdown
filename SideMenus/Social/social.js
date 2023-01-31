@@ -20,6 +20,7 @@ class Social extends HTMLElement {
         this.innerHTML = `
             <aside class="sidebar" id="right-sidebar">
                 <link href="../../SideMenus/Social/social.css" rel="stylesheet">
+                <link href="../../SideMenus/layout.css" rel="stylesheet">
                 <div class="sidebar-header">Friends</div>
                 <ul class="friends-list">
                     <!-- Friend list items here -->

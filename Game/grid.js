@@ -1,25 +1,28 @@
-function updateTurn() {
-    const style = document.createElement('style');
-    style.innerHTML = `
-  #game-board tr:not(.animating):hover :not(td:not(.coin1):not(.coin2) ~ td):not(.coin1):not(.coin2) {
-    background-color: ` + (isFinished ? 'transparent' : playerTurn() === '1' ? '#e46874' : '#46bb9c') + `;
+function playerColour(player) {
+    return isFinished ? 'transparent' : player === '1' ? '#e46874' : '#46bb9c';
 }
-  `;
-    document.head.appendChild(style);
+
+function updateTurn() {
+//     const style = document.createElement('style');
+//     style.innerHTML = `
+//   #game-board tr:not(.animating):hover :not(td:not(.coin1):not(.coin2) ~ td):not(.coin1):not(.coin2) {
+//     background-color: ` + playerColour(playerTurn()) + `;
+// }
+//   `;
+//     document.head.appendChild(style);
 
     document.getElementById('player-turn').classList.add('coin' + playerTurn());
     document.getElementById('player-turn').classList.remove('coin' + lastPlayed);
 }
 
 function disableHighLight() {
-    const style = document.createElement('style');
-    style.innerHTML = `
-  #game-board tr:hover :not(td:not(.coin1):not(.coin2) ~ td):not(.coin1):not(.coin2) {
-    animation-delay: 250ms;
-    background-color: transparent;
-}
-  `;
-    document.head.appendChild(style);
+//     const style = document.createElement('style');
+//     style.innerHTML = `
+//   #game-board tr:hover :not(td:not(.coin1):not(.coin2) ~ td):not(.coin1):not(.coin2) {
+//     background-color: transparent;
+// }
+//   `;
+//     document.head.appendChild(style);
 }
 
 function enableColumnClick(column) {

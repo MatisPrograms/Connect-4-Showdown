@@ -1,0 +1,85 @@
+.sidebar {
+    color: white;
+    background-color: #202123;
+    width: 240px;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    padding: 10px;
+    opacity: 0;
+    filter: blur(5px);
+    transition: all 0.25s;
+    z-index: 1;
+}
+
+.left-sidebar, .right-sidebar {
+    position: relative;
+}
+
+.left-sidebar.hidden, .right-sidebar.hidden {
+    display: none;
+}
+
+#left-sidebar {
+    left: 0;
+    transform: translateX(-100%);
+}
+
+#left-sidebar.open {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+}
+
+#right-sidebar {
+    right: 0;
+    transform: translateX(100%);
+}
+
+#right-sidebar.open {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    padding: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: 2em;
+}
+
+.drawer-toggle-button {
+    position: absolute;
+    bottom: 50%;
+    width: 30px;
+    height: 100px;
+    background-color: #202123;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    color: white;
+    transform: translateX(0);
+    transition: all 0.25s;
+}
+
+.drawer-toggle-button:hover {
+    background-color: #171717;
+}
+
+#toggle-chat-menu {
+    left: 0;
+}
+
+#toggle-chat-menu.open {
+    transform: translateX(260px);
+}
+
+#toggle-social-menu {
+    right: 0;
+}
+
+#toggle-social-menu.open {
+    transform: translateX(-260px);
+}

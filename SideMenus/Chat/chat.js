@@ -1,5 +1,4 @@
-window.addEventListener('load', function () {
-
+function updateMessageObserver() {
     // Message Animations
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -16,7 +15,11 @@ window.addEventListener('load', function () {
     hiddenElements.forEach((element) => {
         observer.observe(element);
     });
+}
 
+window.addEventListener('load', function () {
+
+    updateMessageObserver();
 
     // Chat Menu Animations
     const toggleChatMenuButton = document.getElementById('toggle-chat-menu');
@@ -28,7 +31,35 @@ window.addEventListener('load', function () {
             toggleChatMenuButton.innerHTML = `<i class="fas fa-chevron-right"></i>`;
         }
     });
+
+    document.getElementById("chat-input").addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            addMessage();
+        }
+    });
 });
+
+function addMessage() {
+    const chatMessage = document.createElement('div');
+    chatMessage.classList.add('chat-message', 'message-hidden');
+    chatMessage.innerHTML = `
+            <div class="chat-avatar">
+                <img alt="Avatar" src="https://source.boringavatars.com/beam/50/matis">
+                Me
+            </div>
+            <div class="chat-message-text">
+                ${document.getElementById('chat-input').value}
+            </div>
+    `;
+    document.getElementById('chat-messages').appendChild(chatMessage);
+    document.getElementById('chat-input').value = '';
+
+    const chatMessages = document.getElementById('chat-messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    updateMessageObserver();
+}
 
 class Chat extends HTMLElement {
 
@@ -36,9 +67,10 @@ class Chat extends HTMLElement {
         this.innerHTML = `
             <aside class="sidebar" id="left-sidebar">
                 <link href="../../SideMenus/Chat/chat.css" rel="stylesheet">
+                <link href="../../SideMenus/layout.css" rel="stylesheet">
                 <div class="sidebar-header">Chat</div>
                 <div class="chat-container">
-                    <div class="chat-messages">
+                    <div id="chat-messages" class="chat-messages">
                         <div class="chat-message message-hidden">
                             <div class="chat-avatar">
                                 <img alt="Avatar" src="https://source.boringavatars.com/beam/50/matis">
@@ -110,29 +142,11 @@ class Chat extends HTMLElement {
                             <div class="chat-message-text">
                                 Sure!
                             </div>
-                        </div>
-                        <div class="chat-message message-hidden">
-                            <div class="chat-avatar">
-                                <img alt="Avatar" src="https://source.boringavatars.com/beam/50/matis">
-                                Me
-                            </div>
-                            <div class="chat-message-text">
-                                I'll start!
-                            </div>
-                        </div>
-                        <div class="chat-message other message-hidden">
-                            <div class="chat-avatar">
-                                <img alt="Avatar" src="https://source.boringavatars.com/beam/50/is">
-                                You
-                            </div>
-                            <div class="chat-message-text">
-                                I'll go first!
-                            </div>
-                        </div>
+                        </div> 
                     </div>
                     <div class="chat-input-container">
-                        <textarea class="chat-input" placeholder="Message" rows="1"></textarea>
-                        <div class="chat-send-icon">
+                        <textarea id="chat-input" class="chat-input" placeholder="Message" rows="1"></textarea>
+                        <div class="chat-send-icon" onclick="addMessage()">
                             <i class="fas fa-paper-plane"></i>
                         </div>
                     </div>
