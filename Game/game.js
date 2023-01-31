@@ -72,13 +72,13 @@ function checkWinnerFromCell(board, row, col) {
 }
 
 function isColumnAvailable(number) {
-    return board[number][board[0].length - 1] === "";
+    return board[number][board[number].length - 1] === "";
 }
 
 function columnsAvailable() {
     const columns = [];
     for (let i = 0; i < board.length; i++) {
-        if (board[i][board[i].length - 1] === "") columns.push(i);
+        if (isColumnAvailable(i)) columns.push(i);
     }
     return columns;
 }
@@ -93,10 +93,6 @@ function cellCoordinates(cell) {
 function playCell(x, y, colour) {
     board[x][y] = colour;
     document.getElementById(x + "" + y).classList.add("coin" + colour);
-
-    // aiPlayer = playerTurn();
-    // aiOpponent = lastPlayed;
-    // evaluateBoard(board);
 
     const winner = checkWinnerFromCell(board, x, y)
     if (winner.player !== "" && winner.cells.length > 0) victory(winner.cells)

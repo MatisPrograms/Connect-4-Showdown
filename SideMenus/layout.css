@@ -10,7 +10,7 @@
     opacity: 0;
     filter: blur(5px);
     transition: all 0.25s;
-    z-index: 1;
+    z-index: 2;
 }
 
 .left-sidebar, .right-sidebar {
@@ -62,6 +62,7 @@
     color: white;
     transform: translateX(0);
     transition: all 0.25s;
+    z-index: 2;
 }
 
 .drawer-toggle-button:hover {
