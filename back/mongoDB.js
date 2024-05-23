@@ -1,8 +1,10 @@
+require('dotenv').config();
 const {MongoClient} = require("mongodb");
 
 class Database {
     constructor() {
-        this.url = "mongodb://mongo_database:27017/Connect4";
+        this.url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_URI}/?retryWrites=true&w=majority&appName=MatisCluster`
+        // this.url = "mongodb://mongo_database:27017/Connect4";
         this.client = new MongoClient(this.url);
         this.db = this.client.db("Connect4");
 

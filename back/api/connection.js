@@ -28,7 +28,7 @@ router.POST('/signup', (req, res) => {
         let username = data.username;
         let password = data.password;
         const avatar = data.avatar ? data.avatar : await db.collection("Avatars")
-            .aggregate([{$sample: {size: 1}}])
+            .aggregate([{ $sample: { size: 1 } }])
             .toArray()
             .then(avatars => avatars[0].Url)
             .catch(err => console.log(err));
@@ -54,7 +54,7 @@ router.POST('/signup', (req, res) => {
         password = encrypt(password);
 
         // Check if email or username already exists in the database
-        if (await db.collection("Users").count({$or: [{Email: email}, {Username: username}]}) > 0) {
+        if (await db.collection("Users").count({ $or: [{ Email: email }, { Username: username }] }) > 0) {
             res.statusCode = 409;
             return res.end("Email or Username already exists");
         }
@@ -74,7 +74,7 @@ router.POST('/signup', (req, res) => {
             return res.end("Database error");
         } else {
             res.statusCode = 200;
-            return res.end(JSON.stringify({Email: email, Username: username, Avatar: avatar}));
+            return res.end(JSON.stringify({ Email: email, Username: username, Avatar: avatar }));
         }
     });
 });
@@ -96,7 +96,7 @@ router.POST('/login', (req, res) => {
         await db.collection("Users").findOne({
             Email: email,
             Password: password
-        }, {projection: {Password: 0, Tokens: 0, _id: 0}}).then(user => {
+        }, { projection: { Password: 0, Tokens: 0, _id: 0 } }).then(user => {
             if (!user) {
                 res.statusCode = 401;
                 return res.end("Invalid email or password");
@@ -118,7 +118,7 @@ router.POST('/login', (req, res) => {
                 delete user._id;
 
                 // update user last connection field
-                db.collection("Users").updateOne({Email: email, Password: password}, {
+                db.collection("Users").updateOne({ Email: email, Password: password }, {
                     $set: {
                         LastConnection: new Date(),
                         Tokens: tokens
@@ -160,7 +160,7 @@ router.POST('/logout', (req, res) => {
         }).then(data => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            return res.end(JSON.stringify({tokens: JSON.stringify(data)}));
+            return res.end(JSON.stringify({ tokens: JSON.stringify(data) }));
         }).catch(error => {
             console.log(error);
             res.statusCode = 500;
@@ -169,82 +169,82 @@ router.POST('/logout', (req, res) => {
     });
 });
 router.POST('/updateinfo', (req, res) => {
-        router.json(req).then(async data => {
+    router.json(req).then(async data => {
 
-        const token=req.headers.authorization.split(" ")[1];
+        const token = req.headers.authorization.split(" ")[1];
         const decoded = jwt.verify(token.replaceAll('\"', ''), process.env.JWT_ACCESS_TOKEN, (err, decoded) => {
-                                if (err) return res.end("Unauthorized");
-                                return decoded
-                            });
+            if (err) return res.end("Unauthorized");
+            return decoded
+        });
         console.log("heloooo");
         if (!decoded) return;
-        user = await db.collection("Users").findOne({Email: decoded.email}, {
+        user = await db.collection("Users").findOne({ Email: decoded.email }, {
             projection: {
                 Password: 0,
                 Tokens: 0,
                 _id: 0
             }
         });
-        console.log("user"+user.Username);
-        console.log("data.Username"+data.Username);
-        if(data.Username==user.Username){
-                // Récupérer le nom d'utilisateur depuis les paramètres de l'URL
-                // Get parameters from the url
-        console.log(data);
-                // Vérifier si l'utilisateur existe dans la base de données
+        console.log("user" + user.Username);
+        console.log("data.Username" + data.Username);
+        if (data.Username == user.Username) {
+            // Récupérer le nom d'utilisateur depuis les paramètres de l'URL
+            // Get parameters from the url
+            console.log(data);
+            // Vérifier si l'utilisateur existe dans la base de données
 
-                        await db.collection("Users").updateOne({Username: data.Username}, {
-                                            $set: {
+            await db.collection("Users").updateOne({ Username: data.Username }, {
+                $set: {
 
-                                                Email: data.Email,
-                                                Username: data.Newusername,
-                                                Password:data.Password,
-                                                Avatar:data.Avatar
-                                            }
-                                        }).catch(err => console.log(err));
-                    }
-        else {
-                    // Si l'utilisateur n'existe pas, renvoyer une erreur 404
-                    res.statusCode=404;
-                    console.log("404");
-                    return res.end('Utilisateur non trouvé');
+                    Email: data.Email,
+                    Username: data.Newusername,
+                    Password: data.Password,
+                    Avatar: data.Avatar
                 }
-        userreturn = await db.collection("Users").findOne({Email: decoded.email}, {
-                    projection: {
-                        Password: 0,
-                        Tokens: 0,
-                        _id: 0
-                    }
-                });
+            }).catch(err => console.log(err));
+        }
+        else {
+            // Si l'utilisateur n'existe pas, renvoyer une erreur 404
+            res.statusCode = 404;
+            console.log("404");
+            return res.end('Utilisateur non trouvé');
+        }
+        userreturn = await db.collection("Users").findOne({ Email: decoded.email }, {
+            projection: {
+                Password: 0,
+                Tokens: 0,
+                _id: 0
+            }
+        });
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         console.log(userreturn);
 
         return res.end(JSON.stringify({
-                    Avatar: JSON.stringify(userreturn.Avatar),
-                    Username: JSON.stringify(userreturn.Username),
-                    Email:JSON.stringify(userreturn.Username)
-                }));
-                })
+            Avatar: JSON.stringify(userreturn.Avatar),
+            Username: JSON.stringify(userreturn.Username),
+            Email: JSON.stringify(userreturn.Username)
+        }));
+    })
 
-},true);
+}, true);
 router.POST('/user', (req, res) => {
     router.json(req).then(async data => {
         if (res.statusCode !== 200) return res.end("Unauthorized");
 
         // update user last connection field
-        db.collection("Users").updateOne({Email: data.email}, {$set: {LastConnection: new Date()}}).catch(err => console.log(err));
+        db.collection("Users").updateOne({ Email: data.email }, { $set: { LastConnection: new Date() } }).catch(err => console.log(err));
 
         // get user data
-        const user = await db.collection("Users").findOne({Email: data.email}, {
+        const user = await db.collection("Users").findOne({ Email: data.email }, {
             projection: {
                 Password: 0,
                 Tokens: 0,
                 _id: 0
             }
         })
-        const jwt_token = await db.collection("Users").findOne({Email: data.email}).then(user => user.Tokens.jwt_token);
+        const jwt_token = await db.collection("Users").findOne({ Email: data.email }).then(user => user.Tokens.jwt_token);
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -256,37 +256,37 @@ router.POST('/user', (req, res) => {
 }, true);
 
 // Route GET pour récupérer le mail et le mot de passe associé à un utilisateur
-router.GET('/profile',async (req, res) => {
+router.GET('/profile', async (req, res) => {
 
-        let paramusername;
-        // Récupérer le nom d'utilisateur depuis les paramètres de l'URL
-        // Get parameters from the url
-        const urlParams = req.url.split('?')[1];
-        if (urlParams) {
-            const params = new Map(urlParams.split('&').map(p => p.split('=')));
-            username = params.get('username');
+    let paramusername;
+    // Récupérer le nom d'utilisateur depuis les paramètres de l'URL
+    // Get parameters from the url
+    const urlParams = req.url.split('?')[1];
+    if (urlParams) {
+        const params = new Map(urlParams.split('&').map(p => p.split('=')));
+        username = params.get('username');
 
+    }
+    // Vérifier si l'utilisateur existe dans la base de données
+    const user = await db.collection("Users").findOne({ Username: username }, {
+        projection: {
+            Password: 0,
+            Tokens: 0,
+            _id: 0
         }
-        // Vérifier si l'utilisateur existe dans la base de données
-        const user =  await db.collection("Users").findOne({Username: username}, {
-            projection: {
-                Password: 0,
-                Tokens: 0,
-                _id: 0
-            }
-        })
+    })
 
-        user.Vues=Math.floor(Math.random()*10000);
+    user.Vues = Math.floor(Math.random() * 10000);
 
-        if (!user) {
-            // Si l'utilisateur n'existe pas, renvoyer une erreur 404
-            return res.status(404).send('Utilisateur non trouvé');
-        }
-        res.statusCode = 200;
-        // Si l'utilisateur existe, renvoie le user afin de afficher les info coté client
-        res.setHeader('Content-Type', 'application/json');
-        console.log(user);
-        return res.end(JSON.stringify(user));
+    if (!user) {
+        // Si l'utilisateur n'existe pas, renvoyer une erreur 404
+        return res.status(404).send('Utilisateur non trouvé');
+    }
+    res.statusCode = 200;
+    // Si l'utilisateur existe, renvoie le user afin de afficher les info coté client
+    res.setHeader('Content-Type', 'application/json');
+    console.log(user);
+    return res.end(JSON.stringify(user));
 
 }, false);
 
@@ -294,6 +294,7 @@ router.GET('/avatar', async (req, res) => {
     // Set default data
     res.statusCode = 200;
     res.setHeader('Content-Type', 'image/svg+xml');
+    // const imageUrl = 'https://randomavatar.com/avatar/1043258119';
     const imageUrl = 'https://source.boringavatars.com/beam/50/';
     let imageParams = '';
     let newImage = '';
@@ -308,8 +309,8 @@ router.GET('/avatar', async (req, res) => {
     if (imageParams === '') imageParams = `avatar-${Math.floor(Math.random() * Infinity)}?colors=${randomColour()},${randomColour()},${randomColour()},${randomColour()},${randomColour()}`
 
     // Check if the image doesn't exist in the database
-    if (await db.collection("Avatars").count({Url: imageUrl + imageParams}) === 0) {
-        if (newImage) {
+    if (await db.collection("Avatars").count({ Url: imageUrl + imageParams }) === 0) {
+        if (newImage || newImage === undefined) {
             // Retrieve the image from the API
             await new Promise(resolve => {
                 https.get(imageUrl + imageParams, async (response) => {
@@ -318,7 +319,6 @@ router.GET('/avatar', async (req, res) => {
                         data += chunk;
                     });
                     response.on('end', async () => {
-
                         // Add the image to the database
                         resolve(await db.collection("Avatars").insertOne({
                             Url: imageUrl + imageParams,
@@ -330,11 +330,11 @@ router.GET('/avatar', async (req, res) => {
                 });
             });
         } else {
-            const randAvatar = await db.collection("Avatars").aggregate([{$sample: {size: 1}}]).toArray()
+            const randAvatar = await db.collection("Avatars").aggregate([{ $sample: { size: 1 } }]).toArray()
             return res.end(randAvatar[0].Data);
         }
     }
 
     // Return the image from the database
-    return res.end(await db.collection("Avatars").findOne({Url: imageUrl + imageParams}).then(avatar => avatar.Data));
+    return res.end(await db.collection("Avatars").findOne({ Url: imageUrl + imageParams }).then(avatar => avatar.Data));
 });

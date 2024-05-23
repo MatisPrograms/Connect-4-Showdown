@@ -1,13 +1,14 @@
 const router = require('../queryManagers/routes.js');
 const fs = require("fs");
 const db = require('../mongoDB.js').db;
+const baseFrontPath = require('../queryManagers/front.js').path;
 
 async function getRank(mmr) {
-    if (typeof mmr !== 'number') return {rank: 'Unranked', division: 'Unranked'};
-    const rank = (await db.collection('Ranks').find({"Divisions.MMR": {$lte: mmr}}).sort({"Divisions.MMR": -1}).limit(1).toArray((err, rank) => err ? [] : rank))[0];
+    if (typeof mmr !== 'number') return { rank: 'Unranked', division: 'Unranked' };
+    const rank = (await db.collection('Ranks').find({ "Divisions.MMR": { $lte: mmr } }).sort({ "Divisions.MMR": -1 }).limit(1).toArray((err, rank) => err ? [] : rank))[0];
     for (const division of rank.Divisions.reverse()) {
         if (division.MMR <= mmr) {
-            return {Rank: rank.Rank, Division: division.Division};
+            return { Rank: rank.Rank, Division: division.Division };
         }
     }
 }
@@ -20,7 +21,7 @@ async function getLeaderboard() {
             MMR: 1,
             LastConnection: 1
         }
-    }).sort({MMR: -1}).limit(100).toArray((err, users) => err ? [] : users);
+    }).sort({ MMR: -1 }).limit(100).toArray((err, users) => err ? [] : users);
     for (const user of users) {
         user.Rank = await getRank(user.MMR);
     }
@@ -32,7 +33,7 @@ router.GET('/ranks', async (req, res) => {
     if (ranks) {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        return res.end(JSON.stringify({Ranks: ranks}));
+        return res.end(JSON.stringify({ Ranks: ranks }));
     } else {
         res.statusCode = 500;
         return res.end("Database error");
@@ -58,41 +59,36 @@ router.GET('/leaderboard', async (req, res) => {
     if (leaderboard) {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        return res.end(JSON.stringify({Leaderboard: leaderboard}));
+        return res.end(JSON.stringify({ Leaderboard: leaderboard }));
     } else {
         res.statusCode = 500;
         return res.end("Database error");
     }
 });
-router.GET('/statgame',async (req, res) => {
+router.GET('/statgame', async (req, res) => {
 
-        let paramusername;
-        // Récupérer le nom d'utilisateur depuis les paramètres de l'URL
-        // Get parameters from the url
-        const urlParams = req.url.split('?')[1];
-        if (urlParams) {
-            const params = new Map(urlParams.split('&').map(p => p.split('=')));
-            data = params.get('username');
+    let paramusername;
+    // Récupérer le nom d'utilisateur depuis les paramètres de l'URL
+    // Get parameters from the url
+    const urlParams = req.url.split('?')[1];
+    if (urlParams) {
+        const params = new Map(urlParams.split('&').map(p => p.split('=')));
+        data = params.get('username');
 
-        }
-        // Vérifier si l'utilisateur existe dans la base de données
-        const games =  await db.collection("Games").find({$or: [{Player1: data}, {Player2: data}]}).sort({ Timestamp: 1}).toArray();
+    }
+    // Vérifier si l'utilisateur existe dans la base de données
+    const games = await db.collection("Games").find({ $or: [{ Player1: data }, { Player2: data }] }).sort({ Timestamp: 1 }).toArray();
 
-
-
-
-
-
-        if (!games) {
-            // Si l'utilisateur n'existe pas, renvoyer une erreur 404
-             res.statusCode = 500;
-             return res.end("Database error");
-        }
-        res.statusCode = 200;
-        // Si l'utilisateur existe, renvoie le user afin de afficher les info coté client
-        res.setHeader('Content-Type', 'application/json');
-        console.log(games);
-        return res.end(JSON.stringify(games));
+    if (!games) {
+        // Si l'utilisateur n'existe pas, renvoyer une erreur 404
+        res.statusCode = 500;
+        return res.end("Database error");
+    }
+    res.statusCode = 200;
+    // Si l'utilisateur existe, renvoie le user afin de afficher les info coté client
+    res.setHeader('Content-Type', 'application/json');
+    console.log(games);
+    return res.end(JSON.stringify(games));
 
 }, false);
 router.POST('/save', (req, res) => {
@@ -112,25 +108,25 @@ router.POST('/save', (req, res) => {
         }).then(savedGame => savedGame);
         if (savedGame) {
             db.collection("SavedGames").updateOne({
-                    $or: [
-                        {
-                            Player1: data.player1,
-                            Player2: data.player2
-                        },
-                        {
-                            Player1: data.player2,
-                            Player2: data.player1
-                        }
-                    ]
-                }, {
-                    $set: {
+                $or: [
+                    {
                         Player1: data.player1,
-                        Player2: data.player2,
-                        TurnPlayer: data.turnPlayer,
-                        Board: data.board,
-                        Timestamp: new Date()
+                        Player2: data.player2
+                    },
+                    {
+                        Player1: data.player2,
+                        Player2: data.player1
                     }
+                ]
+            }, {
+                $set: {
+                    Player1: data.player1,
+                    Player2: data.player2,
+                    TurnPlayer: data.turnPlayer,
+                    Board: data.board,
+                    Timestamp: new Date()
                 }
+            }
             ).then(() => {
                 res.statusCode = 200;
                 return res.end("Game saved");
@@ -182,7 +178,7 @@ router.POST('/load', (req, res) => {
             savedGame.TurnNumber = count;
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            return res.end(JSON.stringify({savedGame: savedGame}));
+            return res.end(JSON.stringify({ savedGame: savedGame }));
         } else {
             res.statusCode = 404;
             return res.end("No saved game found");
@@ -247,26 +243,25 @@ router.POST('/solve', (req, res) => {
             console.log('Move not found in cache, fetching from API...')
             const newScore = await fetch('https://connect4.gamesolver.org/solve?pos=' + moves, {
                 method: 'GET',
-                headers: {'Content-Type': 'application/json'}
+                headers: { 'Content-Type': 'application/json' }
             }).then(response => {
                 if (!response.ok) throw new Error(response.statusText);
                 return response.json();
             }).then(data => {
                 data.score = data.score.map((score) => score > 20 ? -20 : score);
-                db.collection('AI').insertOne({Moves: moves, Score: data.score});
+                db.collection('AI').insertOne({ Moves: moves, Score: data.score });
                 return data.score;
             });
             solverCache.set(moves, newScore);
         }
         res.statusCode = 200;
-        return res.end(JSON.stringify({score: solverCache.get(moves)}));
+        return res.end(JSON.stringify({ score: solverCache.get(moves) }));
     });
 });
 
 router.GET('/playlist', async (req, res) => {
     let playlistName = '';
-    const playlistPath = "./front/Assets/Music/"
-
+    const playlistPath = `.${baseFrontPath}/Assets/Music/`;
 
     // Get parameters from the url
     const urlParams = req.url.split('?')[1];
@@ -282,7 +277,7 @@ router.GET('/playlist', async (req, res) => {
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        return res.end(JSON.stringify({playlists: files}));
+        return res.end(JSON.stringify({ playlists: files }));
     }
 
     // If it is a directory, we will return the default file.
@@ -292,7 +287,7 @@ router.GET('/playlist', async (req, res) => {
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        return res.end(JSON.stringify({songs: files}));
+        return res.end(JSON.stringify({ songs: files }));
     } else {
         res.statusCode = 404;
         return res.end("Playlist not found");
