@@ -47,4 +47,4 @@ http.createServer((request, response) => {
         return response.end(`Something in your request (${request.url}) is strange...`);
     }
 // For the server to be listening to request, it needs a port, which is set thanks to the listen function.
-}).listen(8000, () => console.log('Api and Webpage Server running at http://localhost:8000/'));
+}).listen(process.env.PORT || 8000, () => console.log('Api and Webpage Server running at http://localhost:8000/'));
