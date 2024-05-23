@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget xmlns:android="http://schemas.android.com/apk/res/android" id="academy.connect4.showdown" version="1.0.0"
+        xmlns="http://www.w3.org/ns/widgets">
+    <name>Showdown</name>
+    <description>Online Connect 4 Game</description>
+    <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
+        Matis HERRMANN
+    </author>
+    <content src="Home/home.html"/>
+
+    <preference name="Scheme" value="http"/>
+    <allow-intent href="http://*/*"/>
+    <allow-intent href="https://*/*"/>
+
+    <access origin="*"/>
+    <allow-navigation href="http://localhost/*"/>
+    <allow-navigation href="http://showdown.connect4.academy/*"/>
+
+    <preference name="hostname" value="showdown.connect4.academy"/>
+
+    <preference name="StatusBarStyle" value="lightcontent"/>
+    <preference name="StatusBarBackgroundColor" value="#353641"/>
+
+    <platform name="android">
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:usesCleartextTraffic="true"/>
+        </edit-config>
+        <icon src="www/Assets/Champion_Rank_600x600.png"/>
+        <splash src="www/Assets/Champion_Rank_600x600.png"/>
+    </platform>
+</widget>

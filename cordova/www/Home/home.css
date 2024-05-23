@@ -1,0 +1,238 @@
+html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: sans-serif;
+    background: linear-gradient(#353641, #444655);
+}
+
+.welcome-container {
+    display: none;
+    position: absolute;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+    top: 15px;
+    right: 150px;
+    color: white;
+    font-size: 2vh;
+}
+
+.welcome-container.connected {
+    display: flex;
+}
+
+.welcome-username {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.welcome-username span {
+    color: #5cba9c;
+    font-weight: bold;
+}
+
+.welcome-username span::before {
+    content: " ";
+    margin-right: 5px;
+}
+
+.welcome-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    transition: all 0.25s;
+}
+
+.welcome-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: inherit;
+}
+
+.welcome-avatar:hover {
+    cursor: pointer;
+}
+
+.welcome-avatar:hover img {
+    transform: scale(1.15);
+}
+
+.main-content {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 30%;
+    left: 0;
+    right: 0;
+    bottom: 5%;
+    text-align: center;
+    color: white;
+    z-index: 0;
+    font-size: 5vh;
+}
+
+.game-modes-buttons {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-mode-button {
+    background-color: #5cba9c;
+    color: #343541;
+    border: 2px solid #343541;
+    box-shadow: 0 0 5px 0 #202123;
+    border-radius: 15px;
+    padding: 15px 30px;
+    font-weight: bold;
+    margin: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+}
+
+.game-mode-button:hover {
+    background-color: #444655;
+    color: #5cba9c;
+}
+
+.game-mode-button:disabled {
+    background-color: #1e1e23;
+    color: #343541;
+}
+
+.game-mode-button:disabled:hover {
+    background-color: #25252a;
+    color: #42434d;
+}
+
+.game-mode-button .online {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+    height: 1em;
+}
+
+.game-mode-button .online img {
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
+
+.game-mode-button .online span {
+    text-align: center;
+    font-size: 0.3em;
+}
+
+.game-mode-button:disabled .online img {
+    display: none;
+}
+
+.game-mode-button:disabled .online span {
+    display: none;
+}
+
+#background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -100;
+}
+
+#background div {
+    position: absolute;
+    border-radius: 50%;
+}
+
+#background div:nth-child(even) {
+    background-color: #e46874;
+}
+
+#background div:nth-child(odd) {
+    background-color: #46bb9c;
+}
+
+#focus {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(
+            rgba(0, 0, 0, 0.7),
+            rgba(0, 0, 0, 0.7)
+    );
+    filter: blur(5px);
+    z-index: 1;
+}
+
+#HubMusic {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    left: 50%;
+    top: 30px;
+    transform: translateX(-50%);
+    color: white;
+    opacity: 0.75;
+    transition: all 0.25s;
+}
+
+#HubMusic:hover {
+    opacity: 1;
+    cursor: pointer;
+    transform: scale(1.2) translate(-50%);
+}
+
+#HubMusic i {
+    font-size: Clamp(10px, 3vh, 25px);
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (orientation: portrait) {
+    .main-content {
+        font-size: 5vw;
+    }
+
+    .welcome-container {
+        margin-top: 10%;
+        right: 0;
+        top: 20px;
+        width: 50%;
+        margin-left: 25%;
+        margin-right: 25%;
+        border: solid #46bb9c 2px;
+        border-radius: 10px;
+        padding: 5px;
+        background-color: #353641;
+        box-shadow: 0 0 10px 0 #202123;
+        font-size: 2vw;
+    }
+
+    .game-modes-buttons {
+        flex-direction: column;
+    }
+
+    #HubMusic i {
+        font-size: Clamp(10px, 3vw, 25px);
+    }
+}

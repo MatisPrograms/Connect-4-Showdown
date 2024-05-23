@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>Connect 4 Showdown</title>
+
+    <link href="../Assets/Champion_Rank_600x600.png" rel="icon">
+    <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
+    <link href="../Assets/normal.css" rel="stylesheet">
+    <link href="layout.css" rel="stylesheet">
+    <link href="loading.css" rel="stylesheet">
+
+    <script src="../utils.js" type="text/javascript"></script>
+    <script src="../cordova.js" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.6.0/dist/socket.io.js" type="text/javascript"></script>
+    <script src="../Account/account.js" type="text/javascript"></script>
+
+    <script defer src="../SideMenus/Social/social.js" type="text/javascript"></script>
+    <script defer src="../SideMenus/Chat/live-chat.js" type="text/javascript"></script>
+    <script defer src="../SideMenus/Chat/conversation-chat.js" type="text/javascript"></script>
+</head>
+
+<body class="container">
+<app-conversation-chat></app-conversation-chat>
+
+<div class="save-game">
+    <button class="save-game-button" disabled onclick="saveGame()">
+        Save Game
+    </button>
+</div>
+
+<div class="home">
+    <button class="home-button" onclick="home()">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
+
+<div class="ai-container">
+    <div class="mode-select" id="ai-modes">
+        <label for="ai-mode">AI Model:</label>
+        <select id="ai-mode">
+            <option value="hybrid">Hybrid</option>
+            <option value="solver">Solver</option>
+            <option disabled value="minimax">MiniMax</option>
+            <option value="monte-carlo">Monte Carlo</option>
+            <option selected value="random">Random</option>
+        </select>
+    </div>
+    <div class="mode-select">
+        <label for="ai-plays">AI plays: </label>
+        <select id="ai-plays">
+            <option value="1">First</option>
+            <option selected value="2">Second</option>
+        </select>
+    </div>
+</div>
+
+<div class="turn-container" id="turn-container">
+    <label id="player-info">Turn</label>
+    <div class="coin-turn" id="player-turn"></div>
+</div>
+
+<app-live-chat></app-live-chat>
+
+<section class="game-board-container">
+    <link href="game.css" rel="stylesheet">
+    <script defer src="game.js" type="text/javascript"></script>
+    <div class="top-grid">
+        <div class="player">
+            <div class="player-avatar">
+                <img alt="Avatar" src="https://source.boringavatars.com/beam/50/Player1">
+            </div>
+            <div class="player-info">
+                <div class="player-username">Player1</div>
+                <div class="player-sub-info">
+                    <div class="player-mmr">0</div>
+                    <div class="player-timer">30s</div>
+                </div>
+            </div>
+        </div>
+        <div class="top-information">
+            <div class="timer-countdown">5:00</div>
+            <!--            <div class="score-holder">2-13</div>-->
+        </div>
+        <div class="player">
+            <div class="player-avatar">
+                <img alt="Avatar" src="https://source.boringavatars.com/beam/50/Player2">
+            </div>
+            <div class="player-info">
+                <div class="player-username">Player2</div>
+                <div class="player-sub-info">
+                    <div class="player-mmr">0</div>
+                    <div class="player-timer">30s</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table id="game-board">
+        <tr class="column">
+            <td id="00">
+                <div class="cell"></div>
+            </td>
+            <td id="01">
+                <div class="cell"></div>
+            </td>
+            <td id="02">
+                <div class="cell"></div>
+            </td>
+            <td id="03">
+                <div class="cell"></div>
+            </td>
+            <td id="04">
+                <div class="cell"></div>
+            </td>
+            <td id="05">
+                <div class="cell"></div>
+            </td>
+        </tr>
+        <tr class="column">
+            <td id="10">
+                <div class="cell"></div>
+            </td>
+            <td id="11">
+                <div class="cell"></div>
+            </td>
+            <td id="12">
+                <div class="cell"></div>
+            </td>
+            <td id="13">
+                <div class="cell"></div>
+            </td>
+            <td id="14">
+                <div class="cell"></div>
+            </td>
+            <td id="15">
+                <div class="cell"></div>
+            </td>
+        </tr>
+        <tr class="column">
+            <td id="20">
+                <div class="cell"></div>
+            </td>
+            <td id="21">
+                <div class="cell"></div>
+            </td>
+            <td id="22">
+                <div class="cell"></div>
+            </td>
+            <td id="23">
+                <div class="cell"></div>
+            </td>
+            <td id="24">
+                <div class="cell"></div>
+            </td>
+            <td id="25">
+                <div class="cell"></div>
+            </td>
+        </tr>
+        <tr class="column">
+            <td id="30">
+                <div class="cell"></div>
+            </td>
+            <td id="31">
+                <div class="cell"></div>
+            </td>
+            <td id="32">
+                <div class="cell"></div>
+            </td>
+            <td id="33">
+                <div class="cell"></div>
+            </td>
+            <td id="34">
+                <div class="cell"></div>
+            </td>
+            <td id="35">
+                <div class="cell"></div>
+            </td>
+        </tr>
+        <tr class="column">
+            <td id="40">
+                <div class="cell"></div>
+            </td>
+            <td id="41">
+                <div class="cell"></div>
+            </td>
+            <td id="42">
+                <div class="cell"></div>
+            </td>
+            <td id="43">
+                <div class="cell"></div>
+            </td>
+            <td id="44">
+                <div class="cell"></div>
+            </td>
+            <td id="45">
+                <div class="cell"></div>
+            </td>
+        </tr>
+        <tr class="column">
+            <td id="50">
+                <div class="cell"></div>
+            </td>
+            <td id="51">
+                <div class="cell"></div>
+            </td>
+            <td id="52">
+                <div class="cell"></div>
+            </td>
+            <td id="53">
+                <div class="cell"></div>
+            </td>
+            <td id="54">
+                <div class="cell"></div>
+            </td>
+            <td id="55">
+                <div class="cell"></div>
+            </td>
+        </tr>
+        <tr class="column">
+            <td id="60">
+                <div class="cell"></div>
+            </td>
+            <td id="61">
+                <div class="cell"></div>
+            </td>
+            <td id="62">
+                <div class="cell"></div>
+            </td>
+            <td id="63">
+                <div class="cell"></div>
+            </td>
+            <td id="64">
+                <div class="cell"></div>
+            </td>
+            <td id="65">
+                <div class="cell"></div>
+            </td>
+        </tr>
+    </table>
+    <div class="bottom-grid">
+        <button id="reset-game-button" onclick="resetTable()">
+            Reset Game
+        </button>
+    </div>
+
+    <div class="pop-up-message-container" id="load-saved-game-container">
+        <div class="pop-up-message-label">
+            <div><span>!</span> Saved Game Detected <span>!</span></div>
+            <small>Continue where you left off or start a new game ?</small>
+            <small>Starting a new game will <strong>DELETE</strong> existing saved game.</small>
+        </div>
+        <div class="load-saved-game-buttons">
+            <button class="load-saved-game-button">Load Game</button>
+            <button class="load-saved-game-button">New Game</button>
+        </div>
+    </div>
+    <div class="pop-up-message-container" id="online-waiting-container">
+        <div class="pop-up-message-label">
+            <div><span>!</span> Waiting for opponent <span>!</span></div>
+            <small>Waiting for opponent to join the game.</small>
+            <small>Game will start automatically when opponent joins.</small>
+        </div>
+        <div class="loading" id="loading-circle">
+            <div class="loader orbit">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <div class="pop-up-message-container" id="winner-container">
+        <div class="winner-title-container">
+            <!--            <div class="winner-title-message won">You Won</div>-->
+            <!--            <div class="winner-title-message lost">You Lost</div>-->
+            <!--            <div class="winner-title-message draw">Draw</div>-->
+        </div>
+        <div class="winner-match-container">
+            <div class="winner-information-container">
+                <div class="player-info">
+                    <div class="player-avatar">
+                        <img alt="Avatar" src="https://source.boringavatars.com/beam/50/Player1">
+                    </div>
+                    <div class="player-username">Player1</div>
+                </div>
+                <div class="match-info">
+                    <!--                        <div class="score-holder">1 - 2</div>-->
+                    <!--                    <div class="mmr-score">1500<span class="mmr-diff positive">5</span></div>-->
+                </div>
+                <div class="player-info">
+                    <div class="player-avatar">
+                        <img alt="Avatar" src="https://source.boringavatars.com/beam/50/Player2">
+                    </div>
+                    <div class="player-username">Player2</div>
+                </div>
+            </div>
+            <div class="winner-buttons-container">
+                <button class="winner-button" onclick="location.reload()">New Game</button>
+                <button class="winner-button" onclick="resetTable()">Rematch</button>
+            </div>
+        </div>
+    </div>
+    <div id="focus-blur"></div>
+</section>
+
+<app-social></app-social>
+
+</body>
+</html>

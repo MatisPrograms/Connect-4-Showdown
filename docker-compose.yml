@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  mongo_database:
+    image: mongo:latest
+    container_name: mongo_database
+    environment:
+      MONGO_INITDB_DATABASE: Connect4
+    volumes:
+      - database:/data/db
+  connect_4_server:
+    container_name: connect_4_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PROD=${PROD:-dev_start}
+    ports:
+      - "8000:8000"
+      - "3000:3000"
+    volumes:
+      - ./package.json:/connect4server/package.json
+      - ./package-lock.json:/connect4server/package-lock.json
+      - ./.env:/connect4server/.env
+      - ./back:/connect4server/back
+      - ./cordova/www:/connect4server/front
+    depends_on:
+      - mongo_database
+volumes:
+  database: { }

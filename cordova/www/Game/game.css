@@ -1,0 +1,69 @@
+.game-board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-board {
+    transform: rotate(-90deg);
+    background-color: #202123;
+    border-radius: 20px;
+    padding: 1vh;
+    border-spacing: 0;
+}
+
+#game-board tr {
+    cursor: pointer;
+}
+
+#game-board tr:hover {
+    background-color: rgba(68, 70, 86, 0.5);
+}
+
+#game-board td {
+    width: 9vh;
+    height: 9vh;
+    text-align: center;
+    padding: 1vh;
+    vertical-align: middle;
+}
+
+.cell {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: #444656;
+}
+
+.coin1 {
+    background-color: #46bb9c;
+}
+
+.coin2 {
+    background-color: #e46874;
+}
+
+.victory {
+    outline: 5px solid #ffd700;
+    transition: outline 0.25s ease-in-out;
+}
+
+@keyframes size-change {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.2);
+    }
+}
+
+.coin1.cell, .coin2.cell {
+    animation: size-change 0.5s ease-in-out;
+}
+
+@media (orientation: portrait) {
+    #game-board td {
+        width: 9vw;
+        height: 9vw;
+    }
+}

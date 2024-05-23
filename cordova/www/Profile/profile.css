@@ -1,0 +1,442 @@
+html {
+    font-family: sans-serif;
+    background: linear-gradient(#353641, #444655);
+    color: white;
+    height: 100%;
+    width:100%;
+}
+
+body {
+
+}
+
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+
+}
+
+.container div {
+    display: flex;
+}
+
+#main-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+#main-image2 {
+    width: 200px;
+    height: 200px;
+}
+
+#myCanvas {
+    display: none;
+    background-color: white;
+    margin-right: 10px;
+    width: Clamp(100px,60%,800px);
+}
+
+#tableau3 {
+    display: flex;
+    width: 200px;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+
+#tableau4 {
+    display: flex;
+    width: 200px;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#avatars {
+    display: none;
+}
+
+#test2 {
+    display: none;
+}
+
+#newmdp {
+    display: none;
+}
+
+#confirmbutton {
+    width: 100px;
+    display: none;
+}
+
+input[readonly] {
+    pointer-events: none;
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+#myAvatar {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Add some spacing between myAvatar and infos */
+}
+
+#infosmodif {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#topinfos {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+}
+
+#pseudo {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#penbutton {
+    margin-left: 5px; /* Add some spacing between pseudo and pen button */
+    cursor: pointer;
+}
+
+#eyeimg {
+    margin-right: 5px; /* Add some spacing between pseudo and pen button */
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+button {
+    width: 48%;
+    padding: 10px;
+    background-color: #46bb9c;
+    color: white;
+    border: none;
+    margin: 1%;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 3vh;
+}
+
+button:hover {
+    background-color: #8cdcc8;
+}
+
+.active {
+    background-color: #555;
+    color: white;
+}
+
+#profilebutton {
+    background-color: #288264;
+    border: solid white 2px;
+}
+
+#confirmbutton {
+    width: 100px;
+    justify-content: center;
+}
+
+.rank {
+    border: solid white 3px;
+    margin-top: 20px;
+}
+
+#data {
+    width: 25%; /* adjust as needed */
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    text-align: center;
+    background-color: #46bea0;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+#data tr:nth-child(odd) {
+    background-color: #288264;
+}
+
+#data td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+#data td:first-child {
+    font-weight: bold;
+}
+
+#data td:last-child {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#infosnonmodif {
+    position: absolute;
+    right: 50px;
+    bottom:50%;
+    transform: translateY(50%);
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    text-align: center;
+    background-color: rgba(70, 190, 160, 0.8);
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#infosnonmodif tr:nth-child(odd) {
+    background-color: #288264;
+}
+
+#infosnonmodif td {
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+#infosnonmodif td:last-child {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#possibleskin {
+    display: none;
+    width: auto;
+}
+
+#displayedskin {
+    width: auto;
+    display: none
+}
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+#infosmodif, #infosnonmodif {
+    width: 40%; /* Set the width to 50% to display them side by side */
+    margin: 0 5px; /* Add some spacing between the tables */
+}
+
+#ranks {
+    display: flex;
+    position: absolute;
+    bottom: 50px;
+}
+
+.circle {
+    background-color: #46bb9c;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.circle2 {
+    background-color: #e46874;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.coin2 {
+    width: 100px;
+    height: 100px;
+
+    background-color: #46bb9c;
+    opacity: 0.8;
+    background: repeating-linear-gradient(45deg, #444cf7, #444cf7 5px, #46bb9c 5px, #46bb9c 25px);
+    border-radius: 50%;
+}
+
+.coin2R {
+    width: 100px;
+    height: 100px;
+
+    background-color: #e46874;
+    opacity: 0.8;
+    background: repeating-linear-gradient(45deg, #444cf7, #444cf7 5px, #e46874 5px, #e46874 25px);
+    border-radius: 50%;
+}
+
+.coin3 {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #46bb9c;
+    opacity: 0.8;
+    background-image: linear-gradient(135deg, #444cf7 25%, transparent 25%), linear-gradient(225deg, #444cf7 25%, transparent 25%), linear-gradient(45deg, #444cf7 25%, transparent 25%), linear-gradient(315deg, #444cf7 25%, #46bb9c 25%);
+    background-position: 10px 0, 10px 0, 0 0, 0 0;
+    background-size: 10px 10px;
+    background-repeat: repeat;
+}
+
+.coin3R {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #e46874;
+    opacity: 0.8;
+    background-image: linear-gradient(135deg, #444cf7 25%, transparent 25%), linear-gradient(225deg, #444cf7 25%, transparent 25%), linear-gradient(45deg, #444cf7 25%, transparent 25%), linear-gradient(315deg, #444cf7 25%, #e46874 25%);
+    background-position: 10px 0, 10px 0, 0 0, 0 0;
+    background-size: 10px 10px;
+    background-repeat: repeat;
+}
+
+.coin4 {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #46bb9c;
+    opacity: 0.8;
+    background-image: linear-gradient(135deg, #444cf7 25%, transparent 25%), linear-gradient(225deg, #444cf7 25%, transparent 25%), linear-gradient(45deg, #444cf7 25%, transparent 25%), linear-gradient(315deg, #444cf7 25%, #46bb9c 25%);
+    background-position: 10px 0, 10px 0, 0 0, 0 0;
+    background-size: 20px 20px;
+    background-repeat: repeat;
+}
+
+.coin4R {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #e46874;
+    opacity: 0.8;
+    background-image: linear-gradient(135deg, #444cf7 25%, transparent 25%), linear-gradient(225deg, #444cf7 25%, transparent 25%), linear-gradient(45deg, #444cf7 25%, transparent 25%), linear-gradient(315deg, #444cf7 25%, #e46874 25%);
+    background-position: 10px 0, 10px 0, 0 0, 0 0;
+    background-size: 20px 20px;
+    background-repeat: repeat;
+}
+
+.coin5 {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #46BB9C;
+    opacity: 0.8;
+    background-image: radial-gradient(ellipse farthest-corner at 10px 10px, #444cf7, #444cf7 50%, #46BB9C 50%);
+    background-size: 10px 10px;
+}
+
+.coin5R {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #e46874;
+    opacity: 0.8;
+    background-image: radial-gradient(ellipse farthest-corner at 10px 10px, #444cf7, #444cf7 50%, #e46874 50%);
+    background-size: 10px 10px;
+}
+
+#color-select {
+    display: none;
+}
+
+#seleccol {
+    display: none;
+}
+
+#previewicon {
+    display: none;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 0;
+}
+#stats-container {
+    align-content: center;
+}
+#top-container {
+    width: 100%;
+    align-items: center;
+    flex-direction: column;*
+    transform: translate(50%,50%);
+}
+
+#avatars-container {
+    display: flex;
+
+}
+#skins {
+    width: 50%;
+}
+#edit-container {
+    display: flex;
+    align-content: space-between;
+}
+#previewicon {
+    border: solid orange 5px;
+    border-radius: 50%;
+}
+.pickable-circle {
+    height: 5vw;
+    width: 5vw;
+}
+.pickable-avatar {
+    height: 5vh;
+    width: 5vh;
+}
+@media (orientation: portrait) {
+    #avatars-container {
+        position: absolute;
+        bottom: 16vh;
+        right:50%;
+        transform: translate(50%,50%);
+    }
+    #myCanvas {
+        position: absolute;
+        right:50%;
+        bottom: 1vh;
+        transform: translate(50%,0);
+        width: unset;
+        height: 30%;
+    }
+    #data {
+        width: 60%;
+        height: 30%;
+        padding: 0.4vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform : translate(-50%,-50%);
+    }
+    #data td:last-child {
+        font-size: 2vh;
+        font-weight: normal;
+    }
+
+    #data td:first-child {
+        font-size: 2vh;
+        font-weight: normal;
+    }
+    #pseudo, #vues, #elo {
+        font-size: 2vh;
+    }
+    #statsbutton, #profilebutton {
+        padding: 1vh;
+    }
+    #infosnonmodif td:last-child {
+        font-weight: normal;
+        font-size: 2vh;
+    }
+    #data td {
+        padding: 0.6vh;
+
+    }
+}
