@@ -101,5 +101,5 @@ function userDisconnected() {
 }
 
 function baseUrl() {
-    return 'http://' + (window.location.hostname === 'localhost' ? 'localhost:8000' : window.location.host);
+    return window.location.protocol + '//' + (window.location.hostname === 'localhost' ? 'localhost:8000' : window.location.host);
 }

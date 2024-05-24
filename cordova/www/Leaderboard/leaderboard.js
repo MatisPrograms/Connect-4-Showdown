@@ -1,4 +1,4 @@
-const leaderboardSocket = io('http://' + window.location.host.split(':')[0] + ':3000/api/leaderboard');
+const leaderboardSocket = io(window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/leaderboard');
 
 const ONLINE_THRESHOLD = 10;
 let leaderboardSocketRetries = 10;

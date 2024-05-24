@@ -36,7 +36,7 @@ console.log("onload");
 })
 function onloadfunction(){
 try {
-        fetch('http://' + window.location.host + "/api/profile?username=" + username,{method:'GET'})
+        fetch(window.location.protocol + '//' + window.location.host + "/api/profile?username=" + username,{method:'GET'})
         .then(response =>{
         if(!response.ok) throw new Error(response.statusText);
         return response.json();
@@ -71,7 +71,7 @@ try {
         console.error('Erreur:', error);
     }
     try {
-            fetch('http://' + window.location.host + "/api/statgame?username=" + username,{method:'GET'})
+            fetch(window.location.protocol + '//' + window.location.host + "/api/statgame?username=" + username,{method:'GET'})
             .then(response =>{
             if(!response.ok) throw new Error(response.statusText);
             return response.json();
@@ -181,7 +181,7 @@ function updateinfo() {
      }
     console.log("############");
     console.log(bodyToSend);
-    fetch('http://' + window.location.host + "/api/updateinfo", {
+    fetch(window.location.protocol + '//' + window.location.host + "/api/updateinfo", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -201,7 +201,7 @@ function updateinfo() {
 function getpreciserank(elo){
     try{
 
-            fetch('http://' + window.location.host + '/api/rank', {
+            fetch(window.location.protocol + '//' + window.location.host + '/api/rank', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -472,7 +472,7 @@ window.addEventListener('load', () => {
 
 async function getUserData() {
     try {
-        fetch('http://' + window.location.host + "/api/profile?username=" + username,{method:'GET'})
+        fetch(window.location.protocol + '//' + window.location.host + "/api/profile?username=" + username,{method:'GET'})
         .then(response =>{
         if(!response.ok) throw new Error(response.statusText);
         return response.json();
