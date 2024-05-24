@@ -1,4 +1,4 @@
-const socialSocket = io(window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/social', {
+const socialSocket = io(window.location.origin + '/api/social', {
     auth: {
         token: localStorage.getItem('jwt_token')
     }

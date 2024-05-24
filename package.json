@@ -4,11 +4,11 @@
   "description": "Connect 4 showdown is a game where you can play against a friend or against the computer. The computer is not very smart, but it is still fun to play against it.",
   "main": "back/http_server.js",
   "scripts": {
-    "start": "concurrently --kill-others-on-fail \"npm run start_http\" \"npm run start_auth\" \"npm run start_socket\"",
+    "start": "concurrently --kill-others-on-fail \"npm run start_socket\" \"npm run start_auth\"",
     "start_http": "supervisor -w none back/http_server.js",
     "start_auth": "supervisor -w none back/auth_server.js",
     "start_socket": "supervisor -w none back/socket_server.js",
-    "dev_start": "concurrently --no-kill-after-sec 0 \"npm run dev_start_http\" \"npm run dev_start_auth\" \"npm run dev_start_socket\"",
+    "dev_start": "concurrently --no-kill-after-sec 0 \"npm run dev_start_socket\" \"npm run dev_start_auth\"",
     "dev_start_http": "supervisor --watch back back/http_server.js",
     "dev_start_auth": "supervisor --watch back back/auth_server.js",
     "dev_start_socket": "supervisor --watch back back/socket_server.js"

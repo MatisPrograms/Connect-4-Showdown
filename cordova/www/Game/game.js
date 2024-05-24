@@ -1,4 +1,4 @@
-const socket = io(window.location.protocol + '//' + window.location.host.split(':')[0] + ':3000/api/game', {
+const socket = io(window.location.origin + '/api/game', {
     auth: {
         token: localStorage.getItem('jwt_token')
     }
